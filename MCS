@@ -25,16 +25,22 @@ def portfolioPerformance(weights, meanReturns, covMatrix, Time):
     std = np.sqrt( np.dot(weights.T, np.dot(covMatrix, weights)) ) * np.sqrt(Time)
     return returns, std
 
+# add population or sample
 stocklist = ('NVDA','AVGO','AMD','INTC', 'QCOM','TXN','ADI','MU', 'ARM','NXPI','MRVL','MCHP','STM','ON','GFS','MPWR', 'UMC', 'SWKS', 'ASX','QRVO', 'LSCC', 'AMKR', 'RMBS', 'MTSI', 'ALGM', 'WOLF', 'POWI', 'SYNA',
     'CRUS', 'SLAB', 'DIOD', 'VSH', 'TSEM', 'FORM', 'SITM', 'SIMO', 'MXL',
     'NVTS', 'SMTC')
-endDate = dt.datetime.now()
+endDate = dt.datetime.now()                            
 startDate = endDate - dt.timedelta(days=300)
 returns, meanReturns, covMatrix = getData(stocklist, start=startDate, end=endDate)
 returns = returns.dropna()
 
 
 # Creating equal weights
+# 1. np.array is needed to convert the list into numpy array.
+# 2. 1 / len(meanReturns) calculates the fraction or part that each item should contribute equally if we want them all to have the same effect. When creating equal weights, the idea is to give each item the same level of significance. To achieve this, we need to distribute the total weight equally among all the items. If there are, for example, 5 items in meanReturns, each item should contribute 1 / 5 or 0.2 (which represents 20%) to ensure they all have the same relative importance.
+# 3. len(meanReturns) calculates how many items (or elements) are in the meanReturns variable. It counts how many things are in the list or series of data.
+# 4. [1 / len(meanReturns)] * len(meanReturns) creates a list that has this fraction repeated many times, as many times as there are items in meanReturns.
+
 weights_equal = np.array([1 / len(meanReturns)] * len(meanReturns))
 print(weights_equal)
 
